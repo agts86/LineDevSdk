@@ -7,12 +7,12 @@ namespace LineDevSdk.Https;
 /// <summary>
 /// http操作クラス
 /// </summary>
-public class HttpAdapter(HttpClient httpClient)
+internal class HttpAdapter(HttpClient httpClient)
 {
     /// <summary>
     /// HttpClientオブジェクト
     /// </summary>
-    protected HttpClient HttpClient { get;} = httpClient;
+    private HttpClient HttpClient { get;} = httpClient;
 
     /// <summary>
     /// シリアライズオプション
@@ -25,7 +25,7 @@ public class HttpAdapter(HttpClient httpClient)
     /// <param name="url">リクエスト先</param>
     /// <param name="authenticationHeaderValue">basic認証</param>
     /// <returns>レスポンス結果</returns>
-    public async virtual Task<T> GetAsync<T>(string url, AuthenticationHeaderValue authenticationHeaderValue = null) where T : class
+    internal async Task<T> GetAsync<T>(string url, AuthenticationHeaderValue authenticationHeaderValue = null) where T : class
     {
         var request = new HttpRequestMessage
         {
@@ -43,11 +43,49 @@ public class HttpAdapter(HttpClient httpClient)
     /// <param name="contentType">ContentType</param>
     /// <param name="authenticationHeaderValue">basic認証</param>
     /// <returns>レスポンス結果</returns>
-    public async virtual Task<T> PostAsync<T, Tbody>(string url, Tbody body, AuthenticationHeaderValue authenticationHeaderValue = null)  where T : class
+    internal async Task<T> PostAsync<T, Tbody>(string url, Tbody body, AuthenticationHeaderValue authenticationHeaderValue = null)  where T : class
     {
         var request = new HttpRequestMessage
         {
             Method = HttpMethod.Post,
+            RequestUri = new Uri(url),
+            Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json")
+        };
+        request.Headers.Authorization = authenticationHeaderValue;
+        return await SendAsync<T>(request);
+    }
+
+    /// <summary>
+    /// Putリクエストをする
+    /// </summary>
+    /// <param name="url">リクエスト先</param>
+    /// <param name="contentType">ContentType</param>
+    /// <param name="authenticationHeaderValue">basic認証</param>
+    /// <returns>レスポンス結果</returns>
+    internal async Task<T> PutAsync<T, Tbody>(string url, Tbody body, AuthenticationHeaderValue authenticationHeaderValue = null)  where T : class
+    {
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Put,
+            RequestUri = new Uri(url),
+            Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json")
+        };
+        request.Headers.Authorization = authenticationHeaderValue;
+        return await SendAsync<T>(request);
+    }
+
+    /// <summary>
+    /// Deleteリクエストをする
+    /// </summary>
+    /// <param name="url">リクエスト先</param>
+    /// <param name="contentType">ContentType</param>
+    /// <param name="authenticationHeaderValue">basic認証</param>
+    /// <returns>レスポンス結果</returns>
+    internal async Task<T> DeleteAsync<T, Tbody>(string url, Tbody body, AuthenticationHeaderValue authenticationHeaderValue = null)  where T : class
+    {
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Delete,
             RequestUri = new Uri(url),
             Content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json")
         };
