@@ -66,7 +66,7 @@ public class LineSignatureFilter(IConfiguration configuration, IWebHostEnvironme
     /// <param name="requestBody">Body文字列</param>
     /// <param name="receivedSignature">x-line-signatureの値</param>
     /// <returns>結果</returns>
-    private static bool VerifySignature(string channelSecret, string requestBody, string receivedSignature)
+    public static bool VerifySignature(string channelSecret, string requestBody, string receivedSignature)
     {
         using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(channelSecret));
         var requestBodyBytes = Encoding.UTF8.GetBytes(requestBody);
