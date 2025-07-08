@@ -13,7 +13,6 @@ public class EventConverter : JsonConverter<Event[]>
 {
     public override Event[] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var backup = reader;
         using var doc = JsonDocument.ParseValue(ref reader);
         var events = doc.RootElement.EnumerateArray()
             .Select(x =>
@@ -31,7 +30,6 @@ public class EventConverter : JsonConverter<Event[]>
             })
             .Where(x => x is not null)
             .ToArray();
-        reader = backup;
         return events;
     }
 
