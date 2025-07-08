@@ -11,33 +11,26 @@ public interface ILineHttp
     /// </summary>
     /// <param name="reply">返信内容</param>
     /// <returns>実行結果</returns>
-    Task PostReplyAsync(Reply reply);
+    Task PostReplyAsync(Reply Reply, string endPointUrl, string token);
 }   
 
 /// <summary>
 /// LineAPI用のHTTPクライアント
 /// </summary>
-public class LineHttp(HttpClient httpClient, IConfiguration configuration) : ILineHttp
+public class LineHttp(HttpClient httpClient = null) : ILineHttp
 {
     /// <summary>
     /// HttpClient
     /// </summary>
-    private HttpAdapter Http { get; } = new HttpAdapter(httpClient);
-
-    /// <summary>
-    /// 設定情報
-    /// </summary>
-    private IConfiguration Configuration { get; } = configuration;
+    private HttpAdapter Http { get; } = new HttpAdapter(httpClient ?? new HttpClient());
     
     /// <summary>
-    /// グルメAPIを実行して結果を取得する
+    /// 応答メッセージを送信する
     /// </summary>
-    /// <param name="message">位置情報</param>
-    /// <returns>実行結果</returns>
-    public async Task PostReplyAsync(Reply Reply)
+    /// <param name="message">コンテンツ</param>
+    public virtual async Task PostReplyAsync(Reply Reply, string endPointUrl, string token)
     {
-        var url = string.Format(Configuration.GetValue<string>("Line:Url"), "reply");
-        var auth = new AuthenticationHeaderValue("Bearer", Configuration.GetValue<string>("Line:Token"));
-        await Http.PostAsync<object, Reply>(url, Reply, auth);
+        var auth = new AuthenticationHeaderValue("Bearer", token);
+        await Http.PostAsync<object, Reply>(endPointUrl, Reply, auth);
     }
 }
