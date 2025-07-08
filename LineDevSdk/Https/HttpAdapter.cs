@@ -100,7 +100,14 @@ internal class HttpAdapter(HttpClient httpClient)
     private async Task<T> SendAsync<T>(HttpRequestMessage request) where T : class
     {
         var res = await HttpClient.SendAsync(request);
-        if (!res.IsSuccessStatusCode) throw new HttpRequestException(res.RequestMessage.ToString());
+        if (!res.IsSuccessStatusCode)
+        {
+            var errorBody = await res.Content.ReadAsStringAsync();
+            var message = $"Request failed: {(int)res.StatusCode} {res.StatusCode}\n" +
+                          $"Request: {res.RequestMessage}\n" +
+                          $"Response: {errorBody}";
+            throw new HttpRequestException(message, null, res.StatusCode);
+        }
         var json = await res.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize<T>(json, JsonSerializerOptions);
     }
