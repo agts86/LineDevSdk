@@ -14,6 +14,7 @@ public class MessageEvent : Event
     /// 応答トークン
     /// </summary>
     [Required]
+    [JsonPropertyName("replyToken")]
     public string ReplyToken {get; set;}
 
     /// <summary>

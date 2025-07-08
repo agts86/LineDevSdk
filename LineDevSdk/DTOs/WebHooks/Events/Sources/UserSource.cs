@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace LineDevSdk.DTOs.WebHooks.Events.Sources;
 
@@ -11,5 +12,6 @@ public class UserSource : Source
     /// 送信元ユーザーのID
     /// </summary>
     [Required]
+    [JsonPropertyName("userId")]
     public override string UserId { get; set; }
 }

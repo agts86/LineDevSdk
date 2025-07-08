@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace LineDevSdk.DTOs.Commons.Messages;
 
@@ -11,10 +12,12 @@ public class TextMessage : IMessage
     /// タイプ
     /// </summary>
     [Required]
+    [JsonPropertyName("type")]
     public string Type { get; } = "text";
 
     /// <summary>
     /// テキスト
     /// </summary>
+    [JsonPropertyName("text")]
     public string Text { get; set; }
 }

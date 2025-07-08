@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace LineDevSdk.DTOs.WebHooks.Events.Sources;
 
@@ -11,10 +12,12 @@ public class GroupSource : UserSource
     /// 送信元グループのID
     /// </summary>
     [Required]
+    [JsonPropertyName("groupId")]
     public string GroupId { get; set; }
 
     /// <summary>
     /// 送信元ユーザーのID
     /// </summary>
+    [JsonPropertyName("userId")]
     public override string UserId { get; set; }
 }
