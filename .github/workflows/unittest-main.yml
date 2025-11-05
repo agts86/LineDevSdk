@@ -16,13 +16,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
+
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ./API/LineWebHookAPI.sln
+
     - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet build ./API/LineWebHookAPI.sln --no-restore
+
+    - name: Run tests with coverage
+      run: dotnet test ./API/LineWebHookAPI.sln --no-build --verbosity normal --collect:"XPlat Code Coverage"
+
+    - name: Install ReportGenerator
+      run: dotnet tool install --global dotnet-reportgenerator-globaltool
+
+    - name: Generate coverage report in Markdown
+      run: |
+        reportgenerator -reports:**/TestResults/*/coverage.cobertura.xml \
+                        -targetdir:./API/CoverageReport \
+                        -reporttypes:MarkdownSummary
+    
+        cat ./API/CoverageReport/Summary.md >> $GITHUB_STEP_SUMMARY
