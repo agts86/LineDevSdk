@@ -25,8 +25,8 @@ public class LineSignatureFilter(IConfiguration configuration, IWebHostEnvironme
 
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        // デバッグ環境では署名検証をスキップ
-        if (Environment.IsDevelopment())
+        // デバッグ環境かつオプションで検証無効化されている場合はスキップ
+        if (Environment.IsDevelopment() && !Configuration.GetValue("Line:VerifySignature", true))
         {
             await next();
             return;

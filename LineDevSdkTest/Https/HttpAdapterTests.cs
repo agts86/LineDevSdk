@@ -1,12 +1,8 @@
 using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Text.Json;
 using LineDevSdk.Https;
 using Moq;
 using Moq.Protected;
-using Xunit;
 
 namespace LineDevSdkTest.Https;
 

@@ -1,24 +1,29 @@
 using System.Net.Http.Headers;
 using LineDevSdk.DTOs.MessagingAPIs;
-using Microsoft.Extensions.Configuration;
 
 namespace LineDevSdk.Https;
 
-public interface ILineHttp
+public interface ILineMessagingClient
 {
     /// <summary>
     /// グルメAPIを実行して結果を取得する
     /// </summary>
     /// <param name="reply">返信内容</param>
     /// <returns>実行結果</returns>
-    Task PostReplyAsync(Reply Reply, string endPointUrl, string token);
+    Task PostReplyAsync(Reply Reply, string token);
 }   
 
 /// <summary>
-/// LineAPI用のHTTPクライアント
+/// LineAPI用クライアント
 /// </summary>
-public class LineHttp(HttpClient httpClient = null) : ILineHttp
+public class LineMessagingClient(HttpClient httpClient = null) : ILineMessagingClient
 {
+    /// <summary>
+    /// デフォルトURL
+    /// </summary>
+    /// <value></value>
+    public string DefaultUrl { get; } = "https://api.line.me";
+
     /// <summary>
     /// HttpClient
     /// </summary>
@@ -28,9 +33,10 @@ public class LineHttp(HttpClient httpClient = null) : ILineHttp
     /// 応答メッセージを送信する
     /// </summary>
     /// <param name="message">コンテンツ</param>
-    public virtual async Task PostReplyAsync(Reply Reply, string endPointUrl, string token)
+    public async Task PostReplyAsync(Reply Reply, string token)
     {
         var auth = new AuthenticationHeaderValue("Bearer", token);
-        await Http.PostAsync<object, Reply>(endPointUrl, Reply, auth);
+        var endpoint = $"{DefaultUrl}/v2/bot/message/reply";
+        await Http.PostAsync<object, Reply>(endpoint, Reply, auth);
     }
 }

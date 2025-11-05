@@ -2,36 +2,36 @@ using System.Text.Json;
 using LineDevSdk.Jsons;
 using Xunit;
 
-namespace LineDevSdkTest.Jsons
+namespace LineDevSdkTest.Jsons;
+
+public class RealMoldConverterTests
 {
-    public class RealMoldConverterTests
+    [Fact]
+    public void Write_SerializeArray_Success()
     {
-        [Fact]
-        public void Write_SerializeArray_Success()
-        {
-            // Arrange
-            var arr = new int[] { 1, 2, 3 };
-            var options = new JsonSerializerOptions();
-            options.Converters.Add(new RealMoldConverter<int[]>());
+        // Arrange
+        var arr = new int[] { 1, 2, 3 };
+        var options = new JsonSerializerOptions();
+        options.Converters.Add(new RealMoldConverter<int[]>());
 
-            // Act
-            var jsonArr = JsonSerializer.Serialize(arr, options);
+        // Act
+        var jsonArr = JsonSerializer.Serialize(arr, options);
 
-            // Assert
-            Assert.Equal("[1,2,3]", jsonArr);
-        }
+        // Assert
+        Assert.Equal("[1,2,3]", jsonArr);
+    }
 
-        [Fact]
-        public void Read_ThrowsNotImplementedException()
-        {
-            // Arrange
-            var json = "[1,2,3]";
-            var options = new JsonSerializerOptions();
-            options.Converters.Add(new RealMoldConverter<int[]>());
+    [Fact]
+    public void Read_ThrowsNotImplementedException()
+    {
+        // Arrange
+        var json = "[1,2,3]";
+        var options = new JsonSerializerOptions();
+        options.Converters.Add(new RealMoldConverter<int[]>());
 
-            // Act & Assert
-            Assert.Throws<NotImplementedException>(() =>
-                JsonSerializer.Deserialize<int[]>(json, options));
-        }
+        // Act & Assert
+        Assert.Throws<NotImplementedException>(() =>
+            JsonSerializer.Deserialize<int[]>(json, options));
     }
 }
+
