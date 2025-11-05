@@ -40,4 +40,4 @@ jobs:
                         -targetdir:./CoverageReport \
                         -reporttypes:MarkdownSummary
     
-        cat ./API/CoverageReport/Summary.md >> $GITHUB_STEP_SUMMARY
+        cat ./CoverageReport/Summary.md >> $GITHUB_STEP_SUMMARY
