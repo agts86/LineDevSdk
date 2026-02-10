@@ -1,9 +1,8 @@
 using System.Text.Json.Serialization;
-using LineDevSdk.DTOs.Commons.Messages;
 using LineDevSdk.DTOs.Commons.Messages.Templates;
 using LineDevSdk.Jsons;
 
-namespace LineDevSdk.Dtos.Commons.Messages;
+namespace LineDevSdk.DTOs.Commons.Messages;
 
 /// <summary>
 /// テンプレートメッセージ
