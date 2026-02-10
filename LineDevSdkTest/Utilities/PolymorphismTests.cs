@@ -1,5 +1,5 @@
 using LineDevSdk.Utilities;
-using LineDevSdk.DTOs.Commons.Messages;
+using LineDevSdk.DTO.Commons.Messages;
 
 namespace LineDevSdkTest.Utilities;
 
